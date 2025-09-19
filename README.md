@@ -122,7 +122,7 @@ mkdir -p results/pictures results/values
 
 ---
 
-## ▶️ Usage Examples
+## ▶️ Usage Examples (Go to parent directory of terragen project before)
 
 ### 1D + visualization:
 ```bash

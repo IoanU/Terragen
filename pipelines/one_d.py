@@ -1,5 +1,5 @@
 from __future__ import annotations
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import numpy as np
 from ..core_types import FBMParams
 from ..registry import get_noise
@@ -10,7 +10,7 @@ class OneDParams:
     scale: float = 80.0
     seed: int = 1337
     backend: str = "perlin1d"
-    fbm: FBMParams = FBMParams()
+    fbm: FBMParams = field(default_factory=FBMParams)
 
 def generate_1d(params: OneDParams) -> np.ndarray:
     x = np.arange(params.length, dtype=np.float32) / params.scale

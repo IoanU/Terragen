@@ -1,6 +1,7 @@
 from __future__ import annotations
 import argparse, os, datetime
 import numpy as np
+import terragen.noise
 from .pipelines.one_d import OneDParams, generate_1d
 from .pipelines.two_d import TwoDParams, generate_2d
 from .viz import matplotlib_viz as viz
@@ -12,8 +13,8 @@ from .post.erosion import (
     thermal_erosion_1d, hydraulic_erosion_1d,
 )
 
-PICT_DIR = "results/pictures"
-VAL_DIR = "results/values"
+PICT_DIR = "terragen/results/pictures"
+VAL_DIR = "terragen/results/values"
 
 def ensure_dirs():
     os.makedirs(PICT_DIR, exist_ok=True)

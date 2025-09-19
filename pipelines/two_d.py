@@ -1,5 +1,5 @@
 from __future__ import annotations
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import numpy as np
 from ..core_types import FBMParams
 from ..registry import get_noise
@@ -11,7 +11,7 @@ class TwoDParams:
     scale: float = 128.0
     seed: int = 1337
     backend: str = "perlin2d"  # perlin2d | worley2d | diamond_square2d
-    fbm: FBMParams = FBMParams()
+    fbm: FBMParams = field(default_factory=FBMParams)
     worley_cells: int = 32
     worley_metric: str = "euclid"
     ds_size: int = 257
