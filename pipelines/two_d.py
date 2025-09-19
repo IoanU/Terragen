@@ -1,7 +1,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
 import numpy as np
-from ..types import FBMParams
+from ..core_types import FBMParams
 from ..registry import get_noise
 
 @dataclass

@@ -83,7 +83,7 @@ terragen/
 ├── __init__.py
 ├── cli.py              # CLI entry point
 ├── rng.py              # RNG utilities
-├── types.py            # types and FBMParams
+├── core_types.py            # types and FBMParams
 ├── registry.py         # backend registry
 ├── pipelines/          # generation pipelines
 │   ├── one_d.py        # 1D profile generation
