@@ -1,218 +1,127 @@
-# Modular Terrain Generator
+# Terragen 🌍
 
-A modular Python package for **1D and 2D terrain generation** (side-scroller profiles or 2D heightmaps for games). Supports multiple procedural noise methods (Perlin, Worley, Diamond–Square) and post-processing with **erosion algorithms (thermal and hydraulic)** for realistic results.
-
-The project is designed to be **plugin-friendly**, so it can easily be integrated into 2D or 3D games (as a heightmap/mesh generator).
+A modular terrain generator with a fast C++ noise core (via [pybind11](https://github.com/pybind/pybind11)) and a Python front-end for visualization & exports.  
+Designed as a plugin-ready tool for voxel and open-world games (Minecraft-like, survival sandbox, etc.).
 
 ---
 
-## 📦 Dependencies
-- Python **3.10+**
-- **numpy** – numeric computing & arrays
-- **matplotlib** – visualization and PNG export
+## 🚀 Features (MVP)
+- **Noise backends**: Perlin (1D/2D), Diamond–Square (2D).
+- **fBm (Fractal Brownian Motion)**: octaves, lacunarity, gain.
+- **Post-processing**: thermal + hydraulic erosion (simplified).
+- **Export options**:
+  - `.npy` (NumPy array, fast reload)
+  - `.png` (grayscale heightmap)
+  - `.obj` (3D mesh)
+- **Visualization**: quick preview with matplotlib.
 
-Install:
-```bash
-pip install -r requirements.txt
+---
+
+## 📂 Project Structure
 ```
-`requirements.txt`:
-```text
-numpy
-matplotlib
+terragen/
+├── CMakeLists.txt          # CMake build config
+├── pyproject.toml          # Python build/install config
+├── README.md               # This file
+├── cpp/                    # C++ core noise + erosion
+│   ├── bindings.cpp        # Pybind11 bindings
+│   ├── perlin.cpp/.h       # Perlin noise implementation
+│   ├── fbm.cpp/.h          # fBm wrapper (octaves, lacunarity, gain)
+│   ├── diamond_square.cpp/.h # Diamond–Square algorithm
+│   ├── erosion.cpp/.h      # Thermal/hydraulic erosion
+├── python/
+│   └── terragen/
+│       ├── __init__.py     # Package entry
+│       ├── core.py         # High-level Python API (calls C++ core)
+│       ├── cli.py          # CLI wrapper
+```
+
+---
+
+## 🔧 Build & Install
+
+### 1) Clone repo
+```bash
+git clone https://github.com/yourname/terragen.git
+cd terragen
+```
+
+### 2) Build C++ core
+```bash
+cmake -S . -B build -G "Ninja" -DCMAKE_BUILD_TYPE=Release
+cmake --build build
+```
+
+### 3) Install Python package
+```bash
+python -m pip install -v .
+```
+
+---
+
+## 🖥️ Usage
+
+### CLI
+Run from terminal:
+```bash
+terragen --backend fbm --seed 1337 --dim 128 128 --octaves 6 --erosion thermal --export-png terrain.png --show
+```
+
+### Python API
+```python
+import terragen
+
+h = terragen.generate_2d(
+    backend="fbm",
+    seed=1337,
+    width=128,
+    height=128,
+    octaves=6,
+    erosion="thermal"
+)
+
+print("Shape:", h.shape, "min:", float(h.min()), "max:", float(h.max()))
 ```
 
 ---
 
 ## ⚙️ CLI Arguments
 
-Example run:
-```bash
-python -m terragen.cli --dim 2 --width 512 --height 512 --backend perlin2d --octaves 6 --show
-```
-
-### General
-- `--dim {1,2}` – dimension: 1D (terrain profile) or 2D (heightmap).
-- `--seed` – RNG seed (deterministic results).
-- `--backend` – noise backend (`perlin1d`, `perlin2d`, `worley2d`, `diamond_square2d`).
-- `--list-noise` – list all available noise backends.
-- `--show` – open visualization with Matplotlib.
-- `--export-png` – export result as PNG image (saved into `results/pictures/`).
-- `--export-obj` – export heightmap as `.obj` mesh (saved into `results/values/`).
-- `--vertical-scale` – vertical scale factor for `.obj` meshes.
-
-### fBm Parameters
-- `--octaves` – number of octaves (layers of noise).
-- `--lacunarity` – frequency multiplier between octaves.
-- `--gain` – amplitude reduction factor between octaves.
-
-### 1D
-- `--length` – length of the profile.
-- `--scale1d` – X scale factor for noise input.
-
-### 2D
-- `--width`, `--height` – map size.
-- `--scale2d` – XY scale factor for noise input.
-- `--worley-cells` – number of cells for Worley noise.
-- `--worley-metric` – distance metric (`euclid`, `manhattan`, `chebyshev`).
-- `--ds-size` – size for Diamond–Square (power of 2 + 1).
-- `--ds-roughness` – roughness coefficient for Diamond–Square.
-
-### Erosion (post-process)
-- `--erosion {none, thermal, hydraulic}` – type of erosion.
-
-**Thermal:**
-- `--erosion-iters` – number of iterations.
-- `--talus` – slope threshold to trigger erosion.
-- `--erode-factor` – how much material moves each step.
-
-**Hydraulic:**
-- `--rain-drops` – number of simulated raindrops (20k default for 2D, ~8k for 1D).
-- `--inertia` – inertia of water droplets.
-- `--capacity` – sediment carrying capacity.
-- `--min-slope` – minimum slope.
-- `--erode` – erosion rate.
-- `--deposit` – deposition rate.
-- `--evap` – evaporation rate.
+| Argument           | Type      | Description |
+|--------------------|-----------|-------------|
+| `--backend`        | str       | Noise algorithm: `perlin`, `fbm`, `diamond_square`. |
+| `--seed`           | int       | Seed for deterministic terrain generation. Same seed → same terrain. |
+| `--dim`            | int int   | Dimensions of the generated map (width × height). |
+| `--octaves`        | int       | Number of octaves (for fBm). More octaves = more detail. |
+| `--lacunarity`     | float     | Frequency multiplier between octaves (default: 2.0). |
+| `--gain`           | float     | Amplitude multiplier between octaves (default: 0.5). |
+| `--erosion`        | str       | Apply erosion: `thermal`, `hydraulic`, or `none`. |
+| `--export-npy`     | path      | Save result as NumPy `.npy` file. |
+| `--export-png`     | path      | Save result as PNG grayscale heightmap. |
+| `--export-obj`     | path      | Save result as 3D mesh (`.obj`). |
+| `--show`           | flag      | Show result with matplotlib. |
 
 ---
 
-## 📁 Project Structure
+## 📸 Example
 
+**Input:**
+```bash
+terragen --backend diamond_square --seed 42 --dim 64 64 --export-png demo.png --show
 ```
-terragen/
-├── __init__.py
-├── cli.py              # CLI entry point
-├── rng.py              # RNG utilities
-├── core_types.py            # types and FBMParams
-├── registry.py         # backend registry
-├── pipelines/          # generation pipelines
-│   ├── one_d.py        # 1D profile generation
-│   └── two_d.py        # 2D map generation
-├── noise/              # noise algorithms
-│   ├── base.py
-│   ├── perlin.py
-│   ├── worley.py
-│   └── diamond_square.py
-├── post/               # post-processing
-│   └── erosion.py      # thermal & hydraulic erosion
-├── viz/                # visualization
-│   └── matplotlib_viz.py
-└── export/             # exporters
-    ├── png.py
-    └── obj.py
 
-results/
-├── pictures/           # PNG outputs
-└── values/             # OBJ and other numeric outputs
-```
+**Output:**
+- A `64×64` heightmap saved as `demo.png`.
+- Matplotlib preview window.
 
 ---
 
-## 🗂️ Output Directories
-All examples below can save results into two folders:
-- `results/pictures/` – exported images (PNG) and quick previews
-- `results/values/` – raw numeric outputs (e.g., `.npy`) and meshes (e.g., `.obj`)
-
-Create them once:
-```bash
-mkdir -p results/pictures results/values
-```
-
-> Note: The CLI exports PNG and OBJ via `--export-png` and `--export-obj`. To save raw arrays (`.npy`), load the library in Python and use `numpy.save('results/values/file.npy', data)`.
+## 🛠️ Roadmap
+- [ ] Chunked generation for infinite worlds
+- [ ] Biome masks (desert, mountains, rivers)
+- [ ] Parallel generation (multithreading)
 
 ---
 
-## ▶️ Usage Examples (Go to parent directory of terragen project before running)
-
-### 1D + visualization:
-```bash
-python -m terragen.cli --dim 1 --length 1024 --scale1d 90 --seed 42 \
-  --octaves 6 --erosion thermal --erosion-iters 80 --talus 0.012 --erode-factor 0.55 --export-png results/pictures/line.png --show
-```
-
-### 2D + export PNG:
-```bash
-python -m terragen.cli --dim 2 --width 512 --height 512 --scale2d 160 --seed 7 \
-  --backend perlin2d --octaves 6 --lacunarity 2.0 --gain 0.5 \
-  --erosion hydraulic --rain-drops 30000 \
-  --export-png results/pictures/map.png --show
-```
-
-### 2D Worley “islands”:
-```bash
-python -m terragen.cli --dim 2 --backend worley2d --width 512 --height 512 \
-  --worley-cells 40 --worley-metric euclid \
-  --erosion thermal --erosion-iters 60 \
-  --export-png results/pictures/worley.png --show
-```
-
-Results will be visualized with Matplotlib (`--show`) and automatically stored in the `results/` directory.
-
----
-
-### Examples that save into `results/`
-
-**1D + thermal + PNG to `results/pictures/`:**
-```bash
-python -m terragen.cli --dim 1 --length 1024 --scale1d 90 --seed 42 \
-  --octaves 6 --erosion thermal --erosion-iters 80 --talus 0.012 --erode-factor 0.55 \
-  --export-png results/pictures/line_1d_thermal.png --show
-```
-
-**2D Perlin + hydraulic + PNG to `results/pictures/`:**
-```bash
-python -m terragen.cli --dim 2 --width 512 --height 512 --scale2d 160 --seed 7 \
-  --backend perlin2d --octaves 6 --lacunarity 2.0 --gain 0.5 \
-  --erosion hydraulic --rain-drops 30000 \
-  --export-png results/pictures/perlin2d_hydro.png --show
-```
-
-**2D Worley + thermal + PNG to `results/pictures/`:**
-```bash
-python -m terragen.cli --dim 2 --backend worley2d --width 512 --height 512 \
-  --worley-cells 40 --worley-metric euclid \
-  --erosion thermal --erosion-iters 60 \
-  --export-png results/pictures/worley_thermal.png --show
-```
-
-**Export mesh OBJ to `results/values/`:**
-```bash
-python -m terragen.cli --dim 2 --width 257 --height 257 --backend perlin2d \
-  --export-obj results/values/terrain.obj
-```
-
-**Save raw array (`.npy`) to `results/values/` (Python API):**
-```python
-import numpy as np
-from terragen.pipelines.two_d import TwoDParams, generate_2d
-p = TwoDParams(width=512, height=512, scale=160, seed=7)
-hmap = generate_2d(p)
-np.save('results/values/heightmap.npy', hmap)
-```
-
----
-
-## 🕹️ Use Cases
-- procedural terrain for 2D side-scroller games
-- heightmaps for 3D games (extruded in Unity/Unreal)
-- stylized landscapes with erosion effects
-
----
-
-## 📦 Dependencies
-
-This project requires:
-```
-numpy
-matplotlib
-```
-
-These can be installed with:
-```bash
-pip install -r requirements.txt
-```
-
-Or directly:
-```bash
-pip install numpy matplotlib
-```
+## 📜 License
+MIT (or whatever you choose).

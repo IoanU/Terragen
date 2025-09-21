@@ -1,0 +1,36 @@
+[build-system]
+requires = [
+  "scikit-build-core>=0.11",
+  "pybind11>=2.12",
+  "setuptools>=61",
+  "wheel"
+]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "terragen"
+version = "0.1.0"
+description = "Modular terrain generator with C++ core (pybind11) and Python CLI"
+authors = [{ name = "Your Name" }]
+requires-python = ">=3.9"
+dependencies = [
+  "numpy",
+  "pillow",
+  "matplotlib"
+]
+
+[project.scripts]
+terragen = "terragen.cli:main"
+
+[tool.scikit-build]
+build-dir = "build"
+
+[tool.scikit-build.cmake]
+version = ">=3.15"
+
+[tool.setuptools]
+package-dir = {"" = "python"}
+
+[tool.setuptools.packages.find]
+where = ["python"]
+include = ["terragen*"]

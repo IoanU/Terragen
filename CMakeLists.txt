@@ -21,4 +21,9 @@ pybind11_add_module(terragen_core
   cpp/erosion.cpp
 )
 
+install(TARGETS terragen_core
+        LIBRARY DESTINATION terragen
+        RUNTIME DESTINATION terragen
+        ARCHIVE DESTINATION terragen)
+
 # For `pip install .` via scikit-build-core, leave as is

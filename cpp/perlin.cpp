@@ -1,6 +1,8 @@
 #include "perlin.h"
 #include <algorithm>
 #include <random>
+#include <numeric>
+#include <cmath>
 
 Perlin::Perlin(uint64_t seed) {
   p.resize(256);
