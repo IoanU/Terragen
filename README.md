@@ -34,7 +34,28 @@ terragen/
 │       ├── __init__.py     # Package entry
 │       ├── core.py         # High-level Python API (calls C++ core)
 │       ├── cli.py          # CLI wrapper
+│       ├── exports.py      # Exporter to PNG/OBJ/NPY
+│       ├── visualize.py    # Visual preview
 ```
+
+---
+
+## 📦 Requirements
+
+### Build requirements
+- **CMake ≥ 3.15**
+- **C++17 compiler** (tested with MSVC and g++)
+- **Python ≥ 3.9**
+- **[pybind11](https://github.com/pybind/pybind11) ≥ 2.12**  
+  (fetched automatically if not found)
+
+### Python dependencies (auto-installed)
+- `numpy`
+- `pillow`
+- `matplotlib`
+- `setuptools>=61`
+- `scikit-build-core>=0.11`
+- `wheel`
 
 ---
 
@@ -42,7 +63,7 @@ terragen/
 
 ### 1) Clone repo
 ```bash
-git clone https://github.com/yourname/terragen.git
+git clone https://github.com/IoanU/terragen.git
 cd terragen
 ```
 

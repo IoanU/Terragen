@@ -1,2 +1,6 @@
 numpy
+pillow
 matplotlib
+setuptools>=61
+scikit-build-core>=0.11
+wheel

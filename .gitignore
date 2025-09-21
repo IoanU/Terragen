@@ -6,7 +6,17 @@ CMakeCache.txt
 *.dll
 *.lib
 *.obj
+*.exp
 
 # Python cache
 __pycache__/
 *.pyc
+
+# Virtual environments
+.venv/
+env/
+venv/
+
+# IDE configs
+.vscode/
+.idea/
