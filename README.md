@@ -28,14 +28,14 @@ terragen/
 │   ├── perlin.cpp/.h       # Perlin noise implementation
 │   ├── fbm.cpp/.h          # fBm wrapper (octaves, lacunarity, gain)
 │   ├── diamond_square.cpp/.h # Diamond–Square algorithm
-│   ├── erosion.cpp/.h      # Thermal/hydraulic erosion
+│   └── erosion.cpp/.h      # Thermal/hydraulic erosion
 ├── python/
 │   └── terragen/
 │       ├── __init__.py     # Package entry
 │       ├── core.py         # High-level Python API (calls C++ core)
 │       ├── cli.py          # CLI wrapper
 │       ├── exports.py      # Exporter to PNG/OBJ/NPY
-│       ├── visualize.py    # Visual preview
+└       └── visualize.py    # Visual preview
 ```
 
 ---
