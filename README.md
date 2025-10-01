@@ -1,7 +1,7 @@
 # Terragen 🌍
 
 A modular terrain generator with a fast C++ noise core (via [pybind11](https://github.com/pybind/pybind11)) and a Python front-end for visualization & exports.  
-Designed as a plugin-ready tool for voxel and open-world games (Minecraft-like, survival sandbox, etc.).
+Designed as a developer tool for voxel and open-world games (Minecraft-like, survival sandbox, etc.).
 
 ---
 
@@ -138,11 +138,4 @@ terragen --backend diamond_square --seed 42 --dim 64 64 --export-png demo.png --
 ---
 
 ## 🛠️ Roadmap
-- [ ] Chunked generation for infinite worlds
 - [ ] Biome masks (desert, mountains, rivers)
-- [ ] Parallel generation (multithreading)
-
----
-
-## 📜 License
-MIT (or whatever you choose).
