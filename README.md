@@ -1,4 +1,4 @@
-# Terragen 🌍
+# Terragen
 
 A modular terrain generator with a fast C++ noise core (via [pybind11](https://github.com/pybind/pybind11)) and a Python front-end for visualization & exports.  
 Designed as a developer tool for voxel and open-world games (Minecraft-like, survival sandbox, etc.).
