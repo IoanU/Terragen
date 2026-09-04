@@ -5,7 +5,7 @@ Designed as a developer tool for voxel and open-world games (Minecraft-like, sur
 
 ---
 
-## 🚀 Features (MVP)
+## Features (MVP)
 - **Noise backends**: Perlin (1D/2D), Diamond–Square (2D).
 - **fBm (Fractal Brownian Motion)**: octaves, lacunarity, gain.
 - **Post-processing**: thermal + hydraulic erosion (simplified).
@@ -17,7 +17,7 @@ Designed as a developer tool for voxel and open-world games (Minecraft-like, sur
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 ```
 terragen/
 ├── CMakeLists.txt          # CMake build config
@@ -40,7 +40,7 @@ terragen/
 
 ---
 
-## 📦 Requirements
+## Requirements
 
 ### Build requirements
 - **CMake ≥ 3.15**
@@ -59,7 +59,7 @@ terragen/
 
 ---
 
-## 🔧 Build & Install
+## Build & Install
 
 ### 1) Clone repo
 ```bash
@@ -80,7 +80,7 @@ python -m pip install -v .
 
 ---
 
-## 🖥️ Usage
+## Usage
 
 ### CLI
 Run from terminal:
@@ -106,7 +106,7 @@ print("Shape:", h.shape, "min:", float(h.min()), "max:", float(h.max()))
 
 ---
 
-## ⚙️ CLI Arguments
+## CLI Arguments
 
 | Argument           | Type      | Description |
 |--------------------|-----------|-------------|
@@ -124,7 +124,7 @@ print("Shape:", h.shape, "min:", float(h.min()), "max:", float(h.max()))
 
 ---
 
-## 📸 Example
+## Example
 
 **Input:**
 ```bash
